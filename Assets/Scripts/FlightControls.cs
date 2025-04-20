@@ -12,7 +12,8 @@ public class FlightControls : MonoBehaviour
     private float maxSpeed = 1345f;
     private float cruisingSpeed = 577f;
     private float currentSpeed = 0f;
-    private float accelerationMultiplier = 0.1f;
+    float realSpeed;
+    float simulatedSpeed;
     void Start()
     {
         var flightMap = inputActions.FindActionMap("FlightInputs");
@@ -34,30 +35,51 @@ public class FlightControls : MonoBehaviour
 
     private void Accelerate()
     {
-        float realSpeed = rb.linearVelocity.magnitude;
-        Debug.Log(realSpeed);
+        realSpeed = rb.linearVelocity.magnitude;
+        simulatedSpeed = realSpeed * 5f;
+        Debug.Log(simulatedSpeed);
 
-        float accelerationFactor = 1f;
+        float currentSpeedMagnitude = rb.linearVelocity.magnitude;
+        float speedIncrease; 
 
-        if (realSpeed < cruisingSpeed / 2f)
+
+        if (simulatedSpeed < 150)
         {
-            accelerationFactor = 0.2f;
+            currentSpeedMagnitude += (throttle / 25f * Time.fixedDeltaTime);
         }
-        else if (realSpeed >= cruisingSpeed / 2f && realSpeed < cruisingSpeed)
+        else if (simulatedSpeed >= 150 && simulatedSpeed < 200f)
         {
-            accelerationFactor = Mathf.Lerp(1.2f, 0.6f, (realSpeed - cruisingSpeed / 2f) / (cruisingSpeed / 2f));
+            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
         }
-        else if (realSpeed >= cruisingSpeed && realSpeed < maxSpeed)
+        else if (simulatedSpeed >= 200 && simulatedSpeed < 250f)
         {
-            accelerationFactor = Mathf.Lerp(0.6f, 0.1f, (realSpeed - cruisingSpeed) / (maxSpeed - cruisingSpeed));
+            currentSpeedMagnitude += (throttle / 55f * Time.fixedDeltaTime);
+        }
+        else if (simulatedSpeed >= 250 && simulatedSpeed < 300f)
+        {
+            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
+        }
+        else if (simulatedSpeed >= 300 && simulatedSpeed < 400f)
+        {
+            currentSpeedMagnitude += (throttle / 85f * Time.fixedDeltaTime);
+        }
+        else if (simulatedSpeed >= 400 && simulatedSpeed < 500f)
+        {
+            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
+        }
+        else if (simulatedSpeed >= 500 && simulatedSpeed < 700f)
+        {
+            currentSpeedMagnitude += (throttle / 100f * Time.fixedDeltaTime);
         }
         else
         {
-            accelerationFactor = 0f; 
+            currentSpeedMagnitude += (throttle / 125f * Time.fixedDeltaTime);
         }
 
 
-        /*if (currentSpeed < cruisingSpeed / 2)
+
+        //Debug.Log(currentSpeed);
+        if (currentSpeed < cruisingSpeed / 2)
         {
             currentSpeed += throttle / 100f * ((currentSpeed + 200f) / (cruisingSpeed / 2));
         }
@@ -68,42 +90,17 @@ public class FlightControls : MonoBehaviour
         else if (currentSpeed >= cruisingSpeed && currentSpeed < maxSpeed)
         {
             currentSpeed += (throttle / 400f) * (cruisingSpeed / (currentSpeed * 10f));
-        }*/
+        }
 
 
+        
 
-
-
-        float currentSpeedMagnitude = rb.linearVelocity.magnitude;
-
-        float baseAcceleration = 0.45f; 
-        float speedIncrease = throttle * accelerationFactor * baseAcceleration * Time.fixedDeltaTime;
-        currentSpeedMagnitude += speedIncrease;
+        speedIncrease = throttle * Time.fixedDeltaTime;
+        //currentSpeedMagnitude += speedIncrease;
 
         currentSpeedMagnitude = Mathf.Min(currentSpeedMagnitude, maxSpeed);
 
         rb.linearVelocity = -transform.right * currentSpeedMagnitude;
-
-
-
-
-
-        /////////////////////////////////////// Yerçekimi ve Lift Force ///////////////////////////////////////////////
-        // Y doğrultusunda gravity ve lift etkisini uygulama
-        float gravityEffect = 0f;
-        float liftEffect = 0f;
-
-        // Yerçekimi etkisi: Yavaşça artan bir negatif hız (aşağı doğru)
-        gravityEffect = Mathf.Lerp(0f, -2f, currentSpeedMagnitude / maxSpeed);
-
-        // Kaldırma kuvveti: Yavaşça artan bir pozitif hız (yukarı doğru)
-        liftEffect = 0;// Mathf.Lerp(0f, 10f, currentSpeedMagnitude / maxSpeed);
-
-        // Y doğrultusunda hız üzerinde değişiklik yapma
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y + gravityEffect + liftEffect, rb.linearVelocity.z);
-
-
-
         
         /////////////////////////////////////// OLD Lift Force ///////////////////////////////////////////////
         float liftForce = 0f;
@@ -134,11 +131,10 @@ public class FlightControls : MonoBehaviour
 
         //Debug.Log($"Pitch: {pitch}, Roll: {roll}, Yaw: {yaw}, Throttle: {throttle}");
 
-        // Bunları uçuş kontrolüne aktarabilirsin
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            currentSpeed += 100f;
+            realSpeed += 100f;
         }
     }
 }

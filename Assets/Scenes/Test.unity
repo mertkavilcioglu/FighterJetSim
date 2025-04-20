@@ -8418,6 +8418,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7830478140054032398, guid: 6b2e5eeb172c9e444b51bcdbbd9c4c56, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 3fa3c56fbcbc42e4896c82b77d4d83c5, type: 2}
     - target: {fileID: 9160387074781634809, guid: 6b2e5eeb172c9e444b51bcdbbd9c4c56, type: 3}
       propertyPath: m_Name
       value: Airbase
