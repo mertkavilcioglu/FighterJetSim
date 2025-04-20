@@ -36,7 +36,7 @@ public class FlightControls : MonoBehaviour
     private void Accelerate()
     {
         realSpeed = rb.linearVelocity.magnitude;
-        simulatedSpeed = realSpeed * 5f;
+        simulatedSpeed = realSpeed * 7f;
         Debug.Log(simulatedSpeed);
 
         float currentSpeedMagnitude = rb.linearVelocity.magnitude;
@@ -45,31 +45,31 @@ public class FlightControls : MonoBehaviour
 
         if (simulatedSpeed < 150)
         {
-            currentSpeedMagnitude += (throttle / 25f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 30f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 150 && simulatedSpeed < 200f)
         {
-            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 200 && simulatedSpeed < 250f)
         {
-            currentSpeedMagnitude += (throttle / 55f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 250 && simulatedSpeed < 300f)
         {
-            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 300 && simulatedSpeed < 400f)
         {
-            currentSpeedMagnitude += (throttle / 85f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 110f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 400 && simulatedSpeed < 500f)
         {
-            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 120f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 500 && simulatedSpeed < 700f)
         {
-            currentSpeedMagnitude += (throttle / 100f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 130f * Time.fixedDeltaTime);
         }
         else
         {
@@ -102,23 +102,25 @@ public class FlightControls : MonoBehaviour
 
         rb.linearVelocity = -transform.right * currentSpeedMagnitude;
         
-        /////////////////////////////////////// OLD Lift Force ///////////////////////////////////////////////
+        /////////////////////////////////////// Lift Force ///////////////////////////////////////////////
         float liftForce = 0f;
 
         if (realSpeed < 12f)
         {
-            liftForce = Mathf.Lerp(0f, 12f, realSpeed / 12f); 
+            liftForce = Mathf.Lerp(0f, 15f, realSpeed / 12f); 
         }
         else
         {
-            liftForce = Mathf.Lerp(12f, 20f, (realSpeed - 12f) / (maxSpeed - 12f));
+            liftForce = Mathf.Lerp(15f, 30f, (realSpeed - 12f) / (maxSpeed - 12f));
         }
-
         rb.AddForce(Vector3.up * liftForce, ForceMode.Force);
         
 
 
-        // ucagin baktigi yone dogru bu hizi uygula, hiz arttikca gravity - ye dogru kaysin kaldirma kuvveti olarak ama bu sart da degil
+        // hava surtunmesi ve - yonde hiz uygula, ucak suan yavaslamiyor low throttle'da bile
+
+        // asagi dalarken yavasliyor, tirmanirken hizlaniyor gibi. buna da el atman gerekebilir bi ara
+
         // roll ve pitch icin yine ilgili rotasyonlara += seklinde ekleme yap
     }
 

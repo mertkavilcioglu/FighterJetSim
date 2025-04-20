@@ -8418,10 +8418,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7830478140054032398, guid: 6b2e5eeb172c9e444b51bcdbbd9c4c56, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 3fa3c56fbcbc42e4896c82b77d4d83c5, type: 2}
     - target: {fileID: 9160387074781634809, guid: 6b2e5eeb172c9e444b51bcdbbd9c4c56, type: 3}
       propertyPath: m_Name
       value: Airbase
@@ -9076,7 +9072,7 @@ Transform:
   m_GameObject: {fileID: 6545843145191593707}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 462.6, y: 41.637, z: 489.9818}
+  m_LocalPosition: {x: 462.6, y: 41.637, z: 495.9}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 1
   m_Children:
