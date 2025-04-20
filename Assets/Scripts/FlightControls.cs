@@ -41,7 +41,7 @@ public class FlightControls : MonoBehaviour
 
         if (realSpeed < cruisingSpeed / 2f)
         {
-            accelerationFactor = Mathf.Lerp(0.3f, 1.2f, realSpeed / (cruisingSpeed / 2f));
+            accelerationFactor = 0.2f;
         }
         else if (realSpeed >= cruisingSpeed / 2f && realSpeed < cruisingSpeed)
         {
@@ -56,9 +56,27 @@ public class FlightControls : MonoBehaviour
             accelerationFactor = 0f; 
         }
 
+
+        /*if (currentSpeed < cruisingSpeed / 2)
+        {
+            currentSpeed += throttle / 100f * ((currentSpeed + 200f) / (cruisingSpeed / 2));
+        }
+        else if (currentSpeed >= cruisingSpeed / 2 && currentSpeed < cruisingSpeed)
+        {
+            currentSpeed += (throttle / 400f) * ((cruisingSpeed / 2) / (currentSpeed * 2.5f));
+        }
+        else if (currentSpeed >= cruisingSpeed && currentSpeed < maxSpeed)
+        {
+            currentSpeed += (throttle / 400f) * (cruisingSpeed / (currentSpeed * 10f));
+        }*/
+
+
+
+
+
         float currentSpeedMagnitude = rb.linearVelocity.magnitude;
 
-        float baseAcceleration = 0.5f; 
+        float baseAcceleration = 0.45f; 
         float speedIncrease = throttle * accelerationFactor * baseAcceleration * Time.fixedDeltaTime;
         currentSpeedMagnitude += speedIncrease;
 
@@ -70,41 +88,37 @@ public class FlightControls : MonoBehaviour
 
 
 
-        /*Vector3 forceDirection = -transform.right; 
-        rb.AddForce(forceDirection * throttle * accelerationFactor / 2.25f, ForceMode.Force);*/
+        /////////////////////////////////////// Yerçekimi ve Lift Force ///////////////////////////////////////////////
+        // Y doğrultusunda gravity ve lift etkisini uygulama
+        float gravityEffect = 0f;
+        float liftEffect = 0f;
+
+        // Yerçekimi etkisi: Yavaşça artan bir negatif hız (aşağı doğru)
+        gravityEffect = Mathf.Lerp(0f, -2f, currentSpeedMagnitude / maxSpeed);
+
+        // Kaldırma kuvveti: Yavaşça artan bir pozitif hız (yukarı doğru)
+        liftEffect = 0;// Mathf.Lerp(0f, 10f, currentSpeedMagnitude / maxSpeed);
+
+        // Y doğrultusunda hız üzerinde değişiklik yapma
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y + gravityEffect + liftEffect, rb.linearVelocity.z);
 
 
 
-        /*Vector3 targetVelocity = -transform.right * throttle * accelerationFactor;
-        // Hızın maxSpeed'i aşmaması için hız sınırını kontrol ediyoruz
-        if (targetVelocity.magnitude > maxSpeed)
-        {
-            targetVelocity = targetVelocity.normalized * maxSpeed;
-        }
-
-
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity / 1.3f, Time.fixedDeltaTime * 2f);*/
-
-
-
-
-
-
-
-        /////////////////////////////////////// Lift Force ///////////////////////////////////////////////
+        
+        /////////////////////////////////////// OLD Lift Force ///////////////////////////////////////////////
         float liftForce = 0f;
 
         if (realSpeed < 12f)
         {
-            liftForce = Mathf.Lerp(0f, 10f, realSpeed / 12f); 
+            liftForce = Mathf.Lerp(0f, 12f, realSpeed / 12f); 
         }
         else
         {
-            liftForce = Mathf.Lerp(10f, 30f, (realSpeed - 12f) / (maxSpeed - 12f));
+            liftForce = Mathf.Lerp(12f, 20f, (realSpeed - 12f) / (maxSpeed - 12f));
         }
 
         rb.AddForce(Vector3.up * liftForce, ForceMode.Force);
-
+        
 
 
         // ucagin baktigi yone dogru bu hizi uygula, hiz arttikca gravity - ye dogru kaysin kaldirma kuvveti olarak ama bu sart da degil
