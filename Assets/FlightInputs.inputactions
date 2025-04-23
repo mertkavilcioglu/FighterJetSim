@@ -46,7 +46,7 @@
                     "type": "Button",
                     "id": "513137c4-7d69-4db0-a33a-45225806a5c2",
                     "expectedControlType": "",
-                    "processors": "",
+                    "processors": "Scale",
                     "interactions": "",
                     "initialStateCheck": true
                 }
@@ -157,6 +157,28 @@
                     "path": "<HID::Thrustmaster T.16000M>/slider",
                     "interactions": "",
                     "processors": "Invert,Clamp(max=100),Scale(factor=100)",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a2c884d-d2d6-4a50-a81e-b4c49fec8c04",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "Scale(factor=100)",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b376b86-3139-48c8-b63f-dfba04c93b67",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "Scale(factor=-100)",
                     "groups": "",
                     "action": "Throttle",
                     "isComposite": false,

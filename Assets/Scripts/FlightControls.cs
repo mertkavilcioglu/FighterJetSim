@@ -31,6 +31,36 @@ public class FlightControls : MonoBehaviour
     private void FixedUpdate()
     {
         Accelerate();
+        ApplyPitchRollYaw();
+    }
+
+    private void ApplyPitchRollYaw()
+    {
+        float baseRotationSpeed = 50f;
+
+        float pitchSpeed = pitch > 0 ? baseRotationSpeed : baseRotationSpeed * 0.4f;
+
+        float rollSpeed = baseRotationSpeed * 2f;
+
+        float yawSpeed = baseRotationSpeed / 10f;
+
+        Quaternion deltaPitch = Quaternion.AngleAxis(-pitch * pitchSpeed * Time.fixedDeltaTime, Vector3.forward);
+        Quaternion deltaRoll = Quaternion.AngleAxis(roll * rollSpeed * Time.fixedDeltaTime, Vector3.right);
+        Quaternion deltaYaw = Quaternion.AngleAxis(yaw * yawSpeed * Time.fixedDeltaTime, Vector3.up);
+
+        transform.localRotation *= deltaYaw * deltaPitch * deltaRoll;
+
+        // havadaysa rb.freezeRotation = true; else false 
+        // yerçekimi yok ve inerken yavaþlýyor çýkarken hýzlanýyor bunu düzelt
+        // hýz 90dan yüksek deðilse pitch kapa,
+        // irtifa düþükse roll kapa
+        // hýza göre roll ve pitch hýzýný düzenle
+
+        // hava surtunmesi ve - yonde hiz uygula, ucak suan yavaslamiyor low throttle'da bile
+
+        // asagi dalarken yavasliyor, tirmanirken hizlaniyor gibi. buna da el atman gerekebilir bi ara
+
+        // roll ve pitch icin yine ilgili rotasyonlara += seklinde ekleme yap
     }
 
     private void Accelerate()
@@ -107,11 +137,11 @@ public class FlightControls : MonoBehaviour
 
         if (realSpeed < 12f)
         {
-            liftForce = Mathf.Lerp(0f, 15f, realSpeed / 12f); 
+            liftForce = Mathf.Lerp(0f, 7f, realSpeed / 12f);  // daha da düþürürsen güzel olcak gibi
         }
         else
         {
-            liftForce = Mathf.Lerp(15f, 30f, (realSpeed - 12f) / (maxSpeed - 12f));
+            liftForce = Mathf.Lerp(7f, 8f, (realSpeed - 12f) / (maxSpeed - 12f));
         }
         rb.AddForce(Vector3.up * liftForce, ForceMode.Force);
         
