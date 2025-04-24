@@ -5605,7 +5605,7 @@ GameObject:
   - component: {fileID: 7830478140054032398}
   m_Layer: 0
   m_Name: Object_73
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18008,7 +18008,7 @@ GameObject:
   - component: {fileID: 4927677042621209190}
   m_Layer: 0
   m_Name: Airbase
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

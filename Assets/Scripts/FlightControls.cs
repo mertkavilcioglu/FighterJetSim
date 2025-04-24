@@ -14,6 +14,9 @@ public class FlightControls : MonoBehaviour
     private float currentSpeed = 0f;
     float realSpeed;
     float simulatedSpeed;
+
+    private float startAltitude = 2500f;
+    private float altitude;
     void Start()
     {
         var flightMap = inputActions.FindActionMap("FlightInputs");
@@ -32,42 +35,58 @@ public class FlightControls : MonoBehaviour
     {
         Accelerate();
         ApplyPitchRollYaw();
+        Altitude();
+        Debug.Log($"Speed: {simulatedSpeed:F1}, Altitude: {altitude:F1}");
     }
 
     private void ApplyPitchRollYaw()
     {
-        float baseRotationSpeed = 50f;
+        float maxBaseRotationSpeed = 50f;
+        float pitchRollBaseSpeed = 0f;
 
-        float pitchSpeed = pitch > 0 ? baseRotationSpeed : baseRotationSpeed * 0.4f;
+        // Sadece pitch ve roll için hýz skalasý
+        if (simulatedSpeed < 50f)
+        {
+            pitchRollBaseSpeed = 0f;
+        }
+        else if (simulatedSpeed >= 50f && simulatedSpeed < 400f)
+        {
+            float t = Mathf.InverseLerp(50f, 400f, simulatedSpeed);
+            pitchRollBaseSpeed = Mathf.Lerp(0f, maxBaseRotationSpeed, t);
+        }
+        else if (simulatedSpeed >= 400f && simulatedSpeed <= 1345f)
+        {
+            float t = Mathf.InverseLerp(400f, 1345f, simulatedSpeed);
+            pitchRollBaseSpeed = Mathf.Lerp(maxBaseRotationSpeed, maxBaseRotationSpeed / 2f, t);
+        }
 
-        float rollSpeed = baseRotationSpeed * 2f;
-
-        float yawSpeed = baseRotationSpeed / 10f;
+        float pitchSpeed = pitch > 0 ? pitchRollBaseSpeed : pitchRollBaseSpeed * 0.4f;
+        float rollSpeed = pitchRollBaseSpeed * 2f;
+        float yawSpeed = 50f / 10f; // yaw sabit kaldý
 
         Quaternion deltaPitch = Quaternion.AngleAxis(-pitch * pitchSpeed * Time.fixedDeltaTime, Vector3.forward);
         Quaternion deltaRoll = Quaternion.AngleAxis(roll * rollSpeed * Time.fixedDeltaTime, Vector3.right);
         Quaternion deltaYaw = Quaternion.AngleAxis(yaw * yawSpeed * Time.fixedDeltaTime, Vector3.up);
 
         transform.localRotation *= deltaYaw * deltaPitch * deltaRoll;
-
-        // havadaysa rb.freezeRotation = true; else false 
-        // yerçekimi yok ve inerken yavaþlýyor çýkarken hýzlanýyor bunu düzelt
-        // hýz 90dan yüksek deðilse pitch kapa,
-        // irtifa düþükse roll kapa
-        // hýza göre roll ve pitch hýzýný düzenle
-
-        // hava surtunmesi ve - yonde hiz uygula, ucak suan yavaslamiyor low throttle'da bile
-
-        // asagi dalarken yavasliyor, tirmanirken hizlaniyor gibi. buna da el atman gerekebilir bi ara
-
-        // roll ve pitch icin yine ilgili rotasyonlara += seklinde ekleme yap
     }
+
+    // lift'e bi el at
+    // free look
+
+    // hava surtunmesi ve - yonde hiz uygula, ucak suan yavaslamiyor low throttle'da bile
+
+    private void Altitude()
+    {
+        altitude = startAltitude + transform.position.y * 10f;
+    }
+
 
     private void Accelerate()
     {
         realSpeed = rb.linearVelocity.magnitude;
         simulatedSpeed = realSpeed * 7f;
-        Debug.Log(simulatedSpeed);
+        //Debug.Log(simulatedSpeed);
 
         float currentSpeedMagnitude = rb.linearVelocity.magnitude;
         float speedIncrease; 
@@ -167,6 +186,22 @@ public class FlightControls : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             realSpeed += 100f;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            rb.freezeRotation = false;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            rb.freezeRotation = true;
         }
     }
 }
