@@ -11,13 +11,14 @@ public class FlightControls : MonoBehaviour
 
     private float maxSpeed = 1345f;
     private float cruisingSpeed = 577f;
-    private float currentSpeed = 0f;
+    //private float currentSpeed = 0f;
     float realSpeed;
     float simulatedSpeed;
 
     private float startAltitude = 2500f;
     private float altitude;
 
+    private bool isLanded = false;
     private bool airBrakeOn = false;
     void Start()
     {
@@ -144,27 +145,27 @@ public class FlightControls : MonoBehaviour
         {
             currentSpeedMagnitude += (throttle / 30f * Time.fixedDeltaTime);
         }
-        else if (simulatedSpeed >= 150 && simulatedSpeed < 200f)
+        else if (simulatedSpeed < 200f)
         {
             currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
         }
-        else if (simulatedSpeed >= 200 && simulatedSpeed < 250f)
+        else if (simulatedSpeed < 250f)
         {
             currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
         }
-        else if (simulatedSpeed >= 250 && simulatedSpeed < 300f)
+        else if (simulatedSpeed < 300f)
         {
             currentSpeedMagnitude += (throttle / 60f * Time.fixedDeltaTime);
         }
-        else if (simulatedSpeed >= 300 && simulatedSpeed < 400f)
+        else if (simulatedSpeed < 400f)
         {
             currentSpeedMagnitude += (throttle / 75f * Time.fixedDeltaTime);
         }
-        else if (simulatedSpeed >= 400 && simulatedSpeed < 500f)
+        else if (simulatedSpeed < 500f)
         {
             currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
         }
-        else if (simulatedSpeed >= 500 && simulatedSpeed < 700f)
+        else if (simulatedSpeed < 700f)
         {
             currentSpeedMagnitude += (throttle / 105f * Time.fixedDeltaTime);
         }
@@ -173,42 +174,10 @@ public class FlightControls : MonoBehaviour
             currentSpeedMagnitude += (throttle / 120f * Time.fixedDeltaTime);
         }
 
-
-
-        //Debug.Log(currentSpeed);
-        if (currentSpeed < cruisingSpeed / 2)
-        {
-            currentSpeed += throttle / 100f * ((currentSpeed + 200f) / (cruisingSpeed / 2));
-        }
-        else if (currentSpeed >= cruisingSpeed / 2 && currentSpeed < cruisingSpeed)
-        {
-            currentSpeed += (throttle / 400f) * ((cruisingSpeed / 2) / (currentSpeed * 2.5f));
-        }
-        else if (currentSpeed >= cruisingSpeed && currentSpeed < maxSpeed)
-        {
-            currentSpeed += (throttle / 400f) * (cruisingSpeed / (currentSpeed * 10f));
-        }
-
-
-        
-
         speedIncrease = throttle * Time.fixedDeltaTime;
-        //currentSpeedMagnitude += speedIncrease;
-
         currentSpeedMagnitude = Mathf.Min(currentSpeedMagnitude, maxSpeed);
 
         rb.linearVelocity = -transform.right * currentSpeedMagnitude;
-        
-        /////////////////////////////////////// Lift Force ///////////////////////////////////////////////
-        
-        
-
-
-        // hava surtunmesi ve - yonde hiz uygula, ucak suan yavaslamiyor low throttle'da bile
-
-        // asagi dalarken yavasliyor, tirmanirken hizlaniyor gibi. buna da el atman gerekebilir bi ara
-
-        // roll ve pitch icin yine ilgili rotasyonlara += seklinde ekleme yap
     }
 
     private void Deaccelerate()
@@ -299,6 +268,8 @@ public class FlightControls : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             rb.freezeRotation = false;
+            isLanded = true;
+            airBrakeOn = false;
         }
     }
 
@@ -307,12 +278,16 @@ public class FlightControls : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             rb.freezeRotation = true;
+            isLanded = false;
         }
     }
 
     private void ToggleAirBrake()
     {
-        airBrakeOn = !airBrakeOn;
+        if (!isLanded)
+        {
+            airBrakeOn = !airBrakeOn;
+        }
         Debug.Log("Air Brake: " + (airBrakeOn ? "On" : "Off"));
     }
 
