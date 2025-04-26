@@ -49,6 +49,15 @@
                     "processors": "Scale",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "AirBrake",
+                    "type": "Button",
+                    "id": "c0ace6c2-efc4-412c-8609-f77010c97deb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -203,6 +212,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ThrottleButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e142e769-2fa6-46f8-9ff1-a881cbfaf5e5",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AirBrake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12344661-0062-448b-9a82-f0d927c6bda6",
+                    "path": "<HID::Thrustmaster T.16000M>/button13",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AirBrake",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

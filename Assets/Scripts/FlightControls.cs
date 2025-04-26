@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class FlightControls : MonoBehaviour
 {
     public InputActionAsset inputActions;
-    private InputAction pitchAction, rollAction, yawAction, throttleAction;
+    private InputAction pitchAction, rollAction, yawAction, throttleAction, airBrakeAction;
     private float pitch, roll, yaw, throttle;
 
     private Rigidbody rb;
@@ -17,6 +17,8 @@ public class FlightControls : MonoBehaviour
 
     private float startAltitude = 2500f;
     private float altitude;
+
+    private bool airBrakeOn = false;
     void Start()
     {
         var flightMap = inputActions.FindActionMap("FlightInputs");
@@ -26,6 +28,10 @@ public class FlightControls : MonoBehaviour
         yawAction = flightMap.FindAction("Yaw");
         throttleAction = flightMap.FindAction("Throttle");
 
+        airBrakeAction = flightMap.FindAction("AirBrake");
+        airBrakeAction.performed += ctx => ToggleAirBrake();
+        airBrakeAction.Enable();
+
         flightMap.Enable();
 
         rb = GetComponent<Rigidbody>();
@@ -34,47 +40,89 @@ public class FlightControls : MonoBehaviour
     private void FixedUpdate()
     {
         Accelerate();
+        Deaccelerate();
         ApplyPitchRollYaw();
         Altitude();
+        LiftForce();
         Debug.Log($"Speed: {simulatedSpeed:F1}, Altitude: {altitude:F1}");
     }
 
     private void ApplyPitchRollYaw()
     {
-        float maxBaseRotationSpeed = 50f;
+        float maxBaseRotationSpeed = 40f;
         float pitchRollBaseSpeed = 0f;
 
-        // Sadece pitch ve roll için hýz skalasý
         if (simulatedSpeed < 50f)
         {
             pitchRollBaseSpeed = 0f;
         }
         else if (simulatedSpeed >= 50f && simulatedSpeed < 400f)
         {
-            float t = Mathf.InverseLerp(50f, 400f, simulatedSpeed);
+            float t = Mathf.InverseLerp(50f, 350f, simulatedSpeed);
             pitchRollBaseSpeed = Mathf.Lerp(0f, maxBaseRotationSpeed, t);
         }
         else if (simulatedSpeed >= 400f && simulatedSpeed <= 1345f)
         {
-            float t = Mathf.InverseLerp(400f, 1345f, simulatedSpeed);
-            pitchRollBaseSpeed = Mathf.Lerp(maxBaseRotationSpeed, maxBaseRotationSpeed / 2f, t);
+            float t = Mathf.InverseLerp(350f, 1345f, simulatedSpeed);
+            pitchRollBaseSpeed = Mathf.Lerp(maxBaseRotationSpeed, maxBaseRotationSpeed / 4f, t);
         }
 
-        float pitchSpeed = pitch > 0 ? pitchRollBaseSpeed : pitchRollBaseSpeed * 0.4f;
+        float pitchSpeed = pitch > 0 ? pitchRollBaseSpeed : pitchRollBaseSpeed * 0.55f;
         float rollSpeed = pitchRollBaseSpeed * 2f;
-        float yawSpeed = 50f / 10f; // yaw sabit kaldý
+        float yawSpeed = 50f / 10f; 
 
         Quaternion deltaPitch = Quaternion.AngleAxis(-pitch * pitchSpeed * Time.fixedDeltaTime, Vector3.forward);
         Quaternion deltaRoll = Quaternion.AngleAxis(roll * rollSpeed * Time.fixedDeltaTime, Vector3.right);
         Quaternion deltaYaw = Quaternion.AngleAxis(yaw * yawSpeed * Time.fixedDeltaTime, Vector3.up);
 
+
+        // Speed Penalty by Pitch
         transform.localRotation *= deltaYaw * deltaPitch * deltaRoll;
+
+        if (simulatedSpeed > 100f)
+        {
+            float pitchInput = Mathf.Abs(pitch); 
+
+            if (pitchInput > 0.2f)
+            {
+                float sharpness = Mathf.InverseLerp(0.2f, 1f, pitchInput); 
+                float slowdownStrength = Mathf.InverseLerp(0f, maxBaseRotationSpeed, pitchRollBaseSpeed); 
+
+                float slowDownMultiplier = 4f; 
+
+                if(pitch > 0)
+                {
+                    if (pitch < 0.5f)
+                        slowDownMultiplier = 0.75f;
+                    else if (pitch < 0.75f)
+                        slowDownMultiplier = 1.5f;
+                    else if (pitch >= 0.75f)
+                        slowDownMultiplier = 3.0f;
+                }
+                else
+                {
+                    slowDownMultiplier = 0.75f;
+                }
+                float totalSlowdown = sharpness * slowdownStrength * slowDownMultiplier; 
+
+                float decelerationAmount = totalSlowdown * Time.fixedDeltaTime;
+
+                Vector3 currentVelocity = rb.linearVelocity;
+                Vector3 deceleratedVelocity = currentVelocity + currentVelocity.normalized * -decelerationAmount;
+
+                if (Vector3.Dot(currentVelocity, deceleratedVelocity) <= 0)
+                {
+                    deceleratedVelocity = Vector3.zero;
+                }
+
+                rb.linearVelocity = deceleratedVelocity;
+            }
+        }
     }
 
-    // lift'e bi el at
+    // yer çekimi
     // free look
 
-    // hava surtunmesi ve - yonde hiz uygula, ucak suan yavaslamiyor low throttle'da bile
 
     private void Altitude()
     {
@@ -98,31 +146,31 @@ public class FlightControls : MonoBehaviour
         }
         else if (simulatedSpeed >= 150 && simulatedSpeed < 200f)
         {
-            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 200 && simulatedSpeed < 250f)
         {
-            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 250 && simulatedSpeed < 300f)
         {
-            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 60f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 300 && simulatedSpeed < 400f)
         {
-            currentSpeedMagnitude += (throttle / 110f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 75f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 400 && simulatedSpeed < 500f)
         {
-            currentSpeedMagnitude += (throttle / 120f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed >= 500 && simulatedSpeed < 700f)
         {
-            currentSpeedMagnitude += (throttle / 130f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 105f * Time.fixedDeltaTime);
         }
         else
         {
-            currentSpeedMagnitude += (throttle / 125f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 120f * Time.fixedDeltaTime);
         }
 
 
@@ -152,17 +200,7 @@ public class FlightControls : MonoBehaviour
         rb.linearVelocity = -transform.right * currentSpeedMagnitude;
         
         /////////////////////////////////////// Lift Force ///////////////////////////////////////////////
-        float liftForce = 0f;
-
-        if (realSpeed < 12f)
-        {
-            liftForce = Mathf.Lerp(0f, 7f, realSpeed / 12f);  // daha da düþürürsen güzel olcak gibi
-        }
-        else
-        {
-            liftForce = Mathf.Lerp(7f, 8f, (realSpeed - 12f) / (maxSpeed - 12f));
-        }
-        rb.AddForce(Vector3.up * liftForce, ForceMode.Force);
+        
         
 
 
@@ -171,6 +209,73 @@ public class FlightControls : MonoBehaviour
         // asagi dalarken yavasliyor, tirmanirken hizlaniyor gibi. buna da el atman gerekebilir bi ara
 
         // roll ve pitch icin yine ilgili rotasyonlara += seklinde ekleme yap
+    }
+
+    private void Deaccelerate()
+    {
+        if (simulatedSpeed > 0)
+        {
+            float decelerationRate = 1f;
+
+            if (airBrakeOn)
+            {
+                decelerationRate = 3.5f;
+            }
+            else if (throttle < 0.1f)
+            {
+                decelerationRate = 0.1f; 
+            }
+            else if (throttle < 0.3f)
+            {
+                decelerationRate = 0.050f; 
+            }
+            else if (throttle < 0.5f)
+            {
+                decelerationRate = 0.01f; 
+            }
+            else 
+            {
+                decelerationRate = 0; 
+            }
+           
+
+            float decelerationAmount = decelerationRate * Time.fixedDeltaTime;
+
+            Vector3 currentVelocity = rb.linearVelocity;
+
+            Vector3 deceleratedVelocity = currentVelocity + currentVelocity.normalized * -decelerationAmount;
+
+            if (Vector3.Dot(currentVelocity, deceleratedVelocity) <= 0)
+            {
+                deceleratedVelocity = Vector3.zero;
+            }
+
+            rb.linearVelocity = deceleratedVelocity;
+        }
+    }
+
+
+    private void LiftForce() 
+    {
+        float liftForce = 0f;
+
+        if (simulatedSpeed < 84f)
+        {
+            liftForce = Mathf.Lerp(0f, 7f, simulatedSpeed / 84f);  
+        }
+        else if (simulatedSpeed < 200f)
+        {
+            liftForce = 7f;
+        }
+        else if (simulatedSpeed < 350f)
+        {
+            liftForce = 7f;
+        }
+        else if (simulatedSpeed >= 350f)
+        {
+            liftForce = 7f;
+        }
+        rb.AddForce(Vector3.up * liftForce, ForceMode.Force);
     }
 
     void Update()
@@ -185,7 +290,7 @@ public class FlightControls : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            realSpeed += 100f;
+            //airBrakeOn = !airBrakeOn;
         }
     }
 
@@ -204,4 +309,12 @@ public class FlightControls : MonoBehaviour
             rb.freezeRotation = true;
         }
     }
+
+    private void ToggleAirBrake()
+    {
+        airBrakeOn = !airBrakeOn;
+        Debug.Log("Air Brake: " + (airBrakeOn ? "On" : "Off"));
+    }
+
+
 }
