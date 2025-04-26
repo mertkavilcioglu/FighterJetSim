@@ -20,6 +20,9 @@ public class FlightControls : MonoBehaviour
 
     private bool isLanded = false;
     private bool airBrakeOn = false;
+
+    private bool isFalling = false;
+    private float fallingSpeed = 0f;
     void Start()
     {
         var flightMap = inputActions.FindActionMap("FlightInputs");
@@ -44,7 +47,18 @@ public class FlightControls : MonoBehaviour
         Deaccelerate();
         ApplyPitchRollYaw();
         Altitude();
-        LiftForce();
+
+        FallCheck();
+
+        if (!isFalling)
+        {
+            LiftForce();
+        }
+        else if(!isLanded)
+        {
+            ApplyFallingForce();
+        }
+
         Debug.Log($"Speed: {simulatedSpeed:F1}, Altitude: {altitude:F1}");
     }
 
@@ -70,7 +84,13 @@ public class FlightControls : MonoBehaviour
 
         float pitchSpeed = pitch > 0 ? pitchRollBaseSpeed : pitchRollBaseSpeed * 0.55f;
         float rollSpeed = pitchRollBaseSpeed * 2f;
-        float yawSpeed = 50f / 10f; 
+        float yawSpeedMax = 50f / 10f;
+        float yawSpeed = yawSpeedMax;
+
+        if (simulatedSpeed < 15f)
+        {
+            yawSpeed = Mathf.Lerp(0f, yawSpeedMax, simulatedSpeed / 15f);
+        }
 
         Quaternion deltaPitch = Quaternion.AngleAxis(-pitch * pitchSpeed * Time.fixedDeltaTime, Vector3.forward);
         Quaternion deltaRoll = Quaternion.AngleAxis(roll * rollSpeed * Time.fixedDeltaTime, Vector3.right);
@@ -121,8 +141,14 @@ public class FlightControls : MonoBehaviour
         }
     }
 
-    // yer çekimi
     // free look
+    // hud
+    // enemy
+    // radar - hud
+    // gun
+    // missile
+    // enemy gun missile
+    // flare/chaff
 
 
     private void Altitude()
@@ -245,6 +271,25 @@ public class FlightControls : MonoBehaviour
             liftForce = 7f;
         }
         rb.AddForce(Vector3.up * liftForce, ForceMode.Force);
+    }
+
+    private void FallCheck()
+    {
+        if (simulatedSpeed < 150f && throttle < 0.3f)
+        {
+            isFalling = true;
+        }
+        else
+        {
+            isFalling = false;
+            fallingSpeed = 0f; 
+        }
+    }
+
+    private void ApplyFallingForce()
+    {
+        fallingSpeed += 9.81f * Time.fixedDeltaTime; 
+        rb.AddForce(Vector3.down * fallingSpeed, ForceMode.Force);
     }
 
     void Update()
