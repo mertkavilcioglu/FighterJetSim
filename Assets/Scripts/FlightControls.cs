@@ -173,31 +173,31 @@ public class FlightControls : MonoBehaviour
         }
         else if (simulatedSpeed < 200f)
         {
-            currentSpeedMagnitude += (throttle / 30f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 250f)
         {
-            currentSpeedMagnitude += (throttle / 35f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 300f)
         {
-            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 60f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 400f)
         {
-            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 500f)
         {
-            currentSpeedMagnitude += (throttle / 60f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 80f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 700f)
         {
-            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
         }
         else
         {
-            currentSpeedMagnitude += (throttle / 80f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 100f * Time.fixedDeltaTime);
         }
 
         speedIncrease = throttle * Time.fixedDeltaTime;

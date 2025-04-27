@@ -59,13 +59,13 @@ public class FlightHud : MonoBehaviour
 
         // Roll
         float xRotation = flightControls.gameObject.transform.localRotation.x; 
-        Debug.Log(xRotation);
+        //Debug.Log(xRotation);
         if (xRotation > 180f)
             xRotation -= 360f;
 
         float newZRotation = -xRotation;
 
         Quaternion currentRotation = linesMove.rotation;
-        linesMove.rotation = Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, newZRotation);
+        linesMove.rotation = Quaternion.Lerp(currentRotation, Quaternion.Euler(currentRotation.eulerAngles.x, currentRotation.eulerAngles.y, newZRotation), Time.fixedDeltaTime * 7.5f);  
     }
 }
