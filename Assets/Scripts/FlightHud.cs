@@ -12,8 +12,9 @@ public class FlightHud : MonoBehaviour
     public RectTransform linesRot;
 
     [Header("Horizon Settings")]
-    public float horizonMoveFactor = 0.001f; // Z rotasyon baþýna Y hareketi oraný
-    public float baseY = 0.003865f;
+    public float horizonMoveFactor = 0.001f; 
+    public float baseY = -0.0855f;
+
 
     private void Update()
     {
@@ -32,33 +33,41 @@ public class FlightHud : MonoBehaviour
     {
         if (linesMove == null) return;
 
-        // Z rotasyonu al
         float zRotation = flightControls.transform.eulerAngles.z;
 
         if (zRotation > 180f)
             zRotation -= 360f;
 
-        // Y pozisyonu hesapla
         float newY = baseY + (zRotation * horizonMoveFactor);
 
-        // Pozisyonu uygula
         Vector2 newPos = linesRot.anchoredPosition;
         newPos.y = newY;
         linesRot.anchoredPosition = newPos;
 
-        // --- BURAYA YENÝSÝ EKLENDÝ ---
+        // Angle to ground
+        Vector3 forward = -flightControls.transform.right; 
+        Vector3 right = -flightControls.transform.forward;    
 
-        // X rotasyonu al
+        float angleToGround = Vector3.Angle(Vector3.up, forward); 
+
+        float newVerticalPos = baseY + (angleToGround * horizonMoveFactor);
+
+        Vector2 adjustedPos = linesRot.anchoredPosition;
+        adjustedPos.y = newVerticalPos;
+        linesRot.anchoredPosition = adjustedPos;
+
+
+        // Roll
         float xRotation = flightControls.transform.eulerAngles.x;
-
+        Debug.Log(flightControls.transform.eulerAngles.x);
         if (xRotation > 180f)
             xRotation -= 360f;
 
-        // Lines'ýn z rotasyonunu ayarla (TAM TERSÝ YÖN)
         float newZRotation = -xRotation;
 
-        // Lines'ýn rotation'ýný uygula
         linesMove.localRotation = Quaternion.Euler(0f, 0f, newZRotation);
     }
+
+
 
 }

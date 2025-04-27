@@ -161,7 +161,7 @@ public class FlightControls : MonoBehaviour
     {
         realSpeed = rb.linearVelocity.magnitude;
         simulatedSpeed = realSpeed * 9f; // 7f
-        Debug.Log(simulatedSpeed);
+        //Debug.Log(simulatedSpeed);
 
         float currentSpeedMagnitude = rb.linearVelocity.magnitude;
         float speedIncrease; 
