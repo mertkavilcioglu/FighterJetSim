@@ -12,8 +12,8 @@ public class FlightControls : MonoBehaviour
     private float maxSpeed = 1345f;
     private float cruisingSpeed = 577f;
     //private float currentSpeed = 0f;
-    float realSpeed;
-    float simulatedSpeed;
+    private float realSpeed;
+    private float simulatedSpeed;
 
     private float startAltitude = 2500f;
     private float altitude;
@@ -59,7 +59,7 @@ public class FlightControls : MonoBehaviour
             ApplyFallingForce();
         }
 
-        Debug.Log($"Speed: {simulatedSpeed:F1}, Altitude: {altitude:F1}");
+        //Debug.Log($"Speed: {simulatedSpeed:F1}, Altitude: {altitude:F1}");
     }
 
     private void ApplyPitchRollYaw()
@@ -67,13 +67,13 @@ public class FlightControls : MonoBehaviour
         float maxBaseRotationSpeed = 40f;
         float pitchRollBaseSpeed = 0f;
 
-        if (simulatedSpeed < 50f)
+        if (simulatedSpeed < 70f)
         {
             pitchRollBaseSpeed = 0f;
         }
-        else if (simulatedSpeed >= 50f && simulatedSpeed < 400f)
+        else if (simulatedSpeed >= 70f && simulatedSpeed < 400f)
         {
-            float t = Mathf.InverseLerp(50f, 350f, simulatedSpeed);
+            float t = Mathf.InverseLerp(100f, 400f, simulatedSpeed);
             pitchRollBaseSpeed = Mathf.Lerp(0f, maxBaseRotationSpeed, t);
         }
         else if (simulatedSpeed >= 400f && simulatedSpeed <= 1345f)
@@ -160,8 +160,8 @@ public class FlightControls : MonoBehaviour
     private void Accelerate()
     {
         realSpeed = rb.linearVelocity.magnitude;
-        simulatedSpeed = realSpeed * 7f;
-        //Debug.Log(simulatedSpeed);
+        simulatedSpeed = realSpeed * 9f; // 7f
+        Debug.Log(simulatedSpeed);
 
         float currentSpeedMagnitude = rb.linearVelocity.magnitude;
         float speedIncrease; 
@@ -173,31 +173,31 @@ public class FlightControls : MonoBehaviour
         }
         else if (simulatedSpeed < 200f)
         {
-            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 30f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 250f)
         {
-            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 35f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 300f)
         {
-            currentSpeedMagnitude += (throttle / 60f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 40f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 400f)
         {
-            currentSpeedMagnitude += (throttle / 75f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 50f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 500f)
         {
-            currentSpeedMagnitude += (throttle / 90f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 60f * Time.fixedDeltaTime);
         }
         else if (simulatedSpeed < 700f)
         {
-            currentSpeedMagnitude += (throttle / 105f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 70f * Time.fixedDeltaTime);
         }
         else
         {
-            currentSpeedMagnitude += (throttle / 120f * Time.fixedDeltaTime);
+            currentSpeedMagnitude += (throttle / 80f * Time.fixedDeltaTime);
         }
 
         speedIncrease = throttle * Time.fixedDeltaTime;
@@ -334,6 +334,16 @@ public class FlightControls : MonoBehaviour
             airBrakeOn = !airBrakeOn;
         }
         Debug.Log("Air Brake: " + (airBrakeOn ? "On" : "Off"));
+    }
+
+    public float GetAltitude()
+    {
+        return altitude;
+    }
+
+    public float GetSimulatedSpeed()
+    {
+        return simulatedSpeed;
     }
 
 
