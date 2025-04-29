@@ -67,6 +67,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ZoomIn",
+                    "type": "Button",
+                    "id": "6155570c-ec26-471b-b412-2505c045bf31",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ZoomOut",
+                    "type": "Button",
+                    "id": "1b7f07ad-8a88-417c-9f58-9ba8d76c580c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -265,6 +283,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "HatSwitchLook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d94f9d7-8ed7-414f-940a-859313153f49",
+                    "path": "<HID::Thrustmaster T.16000M>/button5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomIn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aca1f32d-61ac-4a20-91c5-50bbf618216c",
+                    "path": "<HID::Thrustmaster T.16000M>/button10",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomOut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

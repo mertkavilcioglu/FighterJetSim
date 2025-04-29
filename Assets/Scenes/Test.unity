@@ -32001,6 +32001,12 @@ MonoBehaviour:
   verticalLimit: 60
   mouseLookSpeedX: 2
   mouseLookSpeedY: 2
+  targetCamera: {fileID: 1823688466}
+  zoomSpeed: 2
+  minFOV: 30
+  maxFOV: 70
+  zoomInButton: {fileID: -5342691011751930438, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
+  zoomOutButton: {fileID: 1896591338481721937, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
 --- !u!114 &7906886046471942901
 MonoBehaviour:
   m_ObjectHideFlags: 0

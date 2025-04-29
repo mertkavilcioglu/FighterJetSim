@@ -3,15 +3,16 @@ using UnityEngine.InputSystem;
 
 public class FlightControls : MonoBehaviour
 {
+    [Header("Input Settings")]
     public InputActionAsset inputActions;
     private InputAction pitchAction, rollAction, yawAction, throttleAction, airBrakeAction;
     private float pitch, roll, yaw, throttle;
 
     private Rigidbody rb;
 
+    [Header("Aircraft Settings (F-16C)")]
     private float maxSpeed = 1345f;
     private float cruisingSpeed = 577f;
-    //private float currentSpeed = 0f;
     private float realSpeed;
     private float simulatedSpeed;
 
@@ -24,20 +25,33 @@ public class FlightControls : MonoBehaviour
     private bool isFalling = false;
     private float fallingSpeed = 0f;
 
+    [Header("Free Look Settings")]
     [SerializeField] private Transform cameraPivot; 
     [SerializeField] private Transform cameraTransform; 
     [SerializeField] private InputActionReference hatSwitchLook;
-    [SerializeField] private float lookSpeed = 60f;
-    [SerializeField] private float verticalLimit = 70f;
+    [SerializeField] private float lookSpeed = 50f;
+    [SerializeField] private float verticalLimit = 60f;
 
     private float horizontalLook = 0f;
     private float verticalLook = 0f;
 
 
-    [SerializeField] private float mouseLookSpeedX = 0.75f;  
-    [SerializeField] private float mouseLookSpeedY = 0.75f;  
+    [SerializeField] private float mouseLookSpeedX = 2f;  
+    [SerializeField] private float mouseLookSpeedY = 2f;  
     private float rotationX = 0f;  
-    private float rotationY = 0f;  
+    private float rotationY = 0f;
+
+    public Camera targetCamera;
+
+    [Header("Zoom Settings")]
+    [SerializeField] private float zoomSpeed = 2f;
+    [SerializeField] private float minFOV = 30f;
+    [SerializeField] private float maxFOV = 70f;
+
+    [Header("Zoom Buttons")]
+    public InputActionReference zoomInButton;
+    public InputActionReference zoomOutButton;
+
     void Start()
     {
         var flightMap = inputActions.FindActionMap("FlightInputs");
@@ -66,14 +80,9 @@ public class FlightControls : MonoBehaviour
         yaw = yawAction.ReadValue<float>();
         throttle = throttleAction.ReadValue<float>();
 
-        //Debug.Log($"Pitch: {pitch}, Roll: {roll}, Yaw: {yaw}, Throttle: {throttle}");
-
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            //airBrakeOn = !airBrakeOn;
-        }
         HandleLook();
+        ZoomScroll();
+        ZoomButton();
     }
 
     private void FixedUpdate()
@@ -111,9 +120,9 @@ public class FlightControls : MonoBehaviour
             float t = Mathf.InverseLerp(100f, 400f, simulatedSpeed);
             pitchRollBaseSpeed = Mathf.Lerp(0f, maxBaseRotationSpeed, t);
         }
-        else if (simulatedSpeed >= 400f && simulatedSpeed <= 1345f)
+        else if (simulatedSpeed >= 400f && simulatedSpeed <= maxSpeed)
         {
-            float t = Mathf.InverseLerp(350f, 1345f, simulatedSpeed);
+            float t = Mathf.InverseLerp(350f, maxSpeed, simulatedSpeed);
             pitchRollBaseSpeed = Mathf.Lerp(maxBaseRotationSpeed, maxBaseRotationSpeed / 4f, t);
         }
 
@@ -176,8 +185,6 @@ public class FlightControls : MonoBehaviour
         }
     }
 
-    // free look
-    // hud
     // enemy
     // radar - hud
     // gun
@@ -375,6 +382,32 @@ public class FlightControls : MonoBehaviour
 
         cameraPivot.localRotation = Quaternion.Euler(0f, 0f, -rotationY);  
         cameraTransform.localRotation = Quaternion.Euler(0f, rotationX, 0f);  
+    }
+
+    void ZoomScroll()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (scroll != 0f)
+        {
+            float newFOV = targetCamera.fieldOfView - scroll * zoomSpeed;
+            targetCamera.fieldOfView = Mathf.Clamp(newFOV, minFOV, maxFOV);
+        }
+    }
+
+    void ZoomButton()
+    {
+        bool zoomInPressed = zoomInButton.action.IsPressed();
+        bool zoomOutPressed = zoomOutButton.action.IsPressed();
+
+        if (zoomInPressed)
+        {
+            targetCamera.fieldOfView = Mathf.Clamp(targetCamera.fieldOfView - zoomSpeed * Time.deltaTime, minFOV, maxFOV);
+        }
+        else if (zoomOutPressed)
+        {
+            targetCamera.fieldOfView = Mathf.Clamp(targetCamera.fieldOfView + zoomSpeed * Time.deltaTime, minFOV, maxFOV);
+        }
     }
 
 
