@@ -23,6 +23,21 @@ public class FlightControls : MonoBehaviour
 
     private bool isFalling = false;
     private float fallingSpeed = 0f;
+
+    [SerializeField] private Transform cameraPivot; 
+    [SerializeField] private Transform cameraTransform; 
+    [SerializeField] private InputActionReference hatSwitchLook;
+    [SerializeField] private float lookSpeed = 60f;
+    [SerializeField] private float verticalLimit = 70f;
+
+    private float horizontalLook = 0f;
+    private float verticalLook = 0f;
+
+
+    [SerializeField] private float mouseLookSpeedX = 0.75f;  
+    [SerializeField] private float mouseLookSpeedY = 0.75f;  
+    private float rotationX = 0f;  
+    private float rotationY = 0f;  
     void Start()
     {
         var flightMap = inputActions.FindActionMap("FlightInputs");
@@ -39,6 +54,26 @@ public class FlightControls : MonoBehaviour
         flightMap.Enable();
 
         rb = GetComponent<Rigidbody>();
+
+        Cursor.lockState = CursorLockMode.Locked;  
+        Cursor.visible = false;  
+    }
+
+    void Update()
+    {
+        pitch = pitchAction.ReadValue<float>();
+        roll = rollAction.ReadValue<float>();
+        yaw = yawAction.ReadValue<float>();
+        throttle = throttleAction.ReadValue<float>();
+
+        //Debug.Log($"Pitch: {pitch}, Roll: {roll}, Yaw: {yaw}, Throttle: {throttle}");
+
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            //airBrakeOn = !airBrakeOn;
+        }
+        HandleLook();
     }
 
     private void FixedUpdate()
@@ -292,21 +327,56 @@ public class FlightControls : MonoBehaviour
         rb.AddForce(Vector3.down * fallingSpeed, ForceMode.Force);
     }
 
-    void Update()
+
+    private void HandleHatSwitchLook() // Hat Switch Only (not in use anymore)
     {
-        pitch = pitchAction.ReadValue<float>();
-        roll = rollAction.ReadValue<float>();
-        yaw = yawAction.ReadValue<float>();
-        throttle = throttleAction.ReadValue<float>();
+        Vector2 input = hatSwitchLook.action.ReadValue<Vector2>();
+        if (input == Vector2.zero) return;
 
-        //Debug.Log($"Pitch: {pitch}, Roll: {roll}, Yaw: {yaw}, Throttle: {throttle}");
+        horizontalLook += input.x * lookSpeed * Time.deltaTime;
+        verticalLook -= input.y * lookSpeed * Time.deltaTime;
+        verticalLook = Mathf.Clamp(verticalLook, -verticalLimit, verticalLimit);
 
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            //airBrakeOn = !airBrakeOn;
-        }
+        cameraPivot.localRotation = Quaternion.Euler(0f, 0f, -horizontalLook);
+        cameraTransform.localRotation = Quaternion.Euler(0f, verticalLook, 0f);
     }
+
+    private void HandleMouseLook() // Mouse Only (not in use anymore)
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        rotationY += mouseX * mouseLookSpeedX;
+        rotationY = Mathf.Clamp(rotationY, -verticalLimit, verticalLimit);  
+
+        rotationX -= mouseY * mouseLookSpeedY;
+        rotationX = Mathf.Clamp(rotationX, -verticalLimit, verticalLimit);  
+
+        cameraPivot.localRotation = Quaternion.Euler(0f, 0f, -rotationY);  
+        cameraTransform.localRotation = Quaternion.Euler(0f, rotationX, 0f);  
+    }
+
+    private void HandleLook() // Mouse and Hat Switch
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        Vector2 hatInput = hatSwitchLook.action.ReadValue<Vector2>();
+        if (hatInput != Vector2.zero)
+        {
+            mouseX = hatInput.x / 4;
+            mouseY = hatInput.y / 4; 
+        }
+
+        rotationY += mouseX * mouseLookSpeedX;
+        rotationX -= mouseY * mouseLookSpeedY;
+
+        rotationX = Mathf.Clamp(rotationX, -verticalLimit, verticalLimit);
+
+        cameraPivot.localRotation = Quaternion.Euler(0f, 0f, -rotationY);  
+        cameraTransform.localRotation = Quaternion.Euler(0f, rotationX, 0f);  
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {

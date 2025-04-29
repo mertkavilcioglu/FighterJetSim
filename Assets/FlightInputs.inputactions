@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "HatSwitchLook",
+                    "type": "Value",
+                    "id": "d0d1a029-733d-4160-beb9-61f30b1df85f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -234,6 +243,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "AirBrake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b5de86e-42b8-466d-8827-8732eed175a9",
+                    "path": "<HID::Thrustmaster T.16000M>/hat",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HatSwitchLook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be811b74-79ae-4af2-9e06-6cf10592ab79",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HatSwitchLook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
