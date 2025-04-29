@@ -44,7 +44,7 @@ public class FlightControls : MonoBehaviour
     public Camera targetCamera;
 
     [Header("Zoom Settings")]
-    [SerializeField] private float zoomSpeed = 2f;
+    [SerializeField] private float zoomSpeed = 20f;
     [SerializeField] private float minFOV = 30f;
     [SerializeField] private float maxFOV = 70f;
 
