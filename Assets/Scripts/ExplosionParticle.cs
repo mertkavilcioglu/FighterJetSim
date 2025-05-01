@@ -11,7 +11,10 @@ public class ExplosionParticle : MonoBehaviour
         {
             explosion.Play();
         }
-
-        Destroy(gameObject, 3f); 
+        if(gameObject != null)
+        {
+            Destroy(gameObject, 3f);
+        }
+        
     }
 }
