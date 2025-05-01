@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private float customGravity = 2f;
+    private float customGravity = 1f;
     private Rigidbody rb;
 
     void Start()
@@ -14,5 +14,13 @@ public class Bullet : MonoBehaviour
     void FixedUpdate()
     {
         rb.AddForce(Vector3.down * customGravity, ForceMode.Acceleration);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Hit Enemy");
+        }
     }
 }

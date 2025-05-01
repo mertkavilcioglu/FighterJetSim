@@ -126,7 +126,7 @@ public class FlightControls : MonoBehaviour
         }
 
         float pitchSpeed = pitch > 0 ? pitchRollBaseSpeed : pitchRollBaseSpeed * 0.55f;
-        float rollSpeed = pitchRollBaseSpeed * 2f;
+        float rollSpeed = pitchRollBaseSpeed * 2.25f;
         float yawSpeedMax = 50f / 10f;
         float yawSpeed = yawSpeedMax;
 

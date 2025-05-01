@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 629980715372209675}
   - component: {fileID: 2554321288442959282}
   - component: {fileID: 6249591703900527976}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 3634178085951256637}
   - component: {fileID: 4910196539815535649}
   - component: {fileID: 2172949127182314910}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +489,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8777761589649490787}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,7 +523,7 @@ GameObject:
   - component: {fileID: 634920306844249995}
   - component: {fileID: 7685927573944939970}
   - component: {fileID: 7773762877140811942}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -763,7 +763,7 @@ GameObject:
   - component: {fileID: 4318134624378039980}
   - component: {fileID: 3591745315284760883}
   - component: {fileID: 5387118772570197825}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +1006,7 @@ GameObject:
   - component: {fileID: 1831062579843659636}
   - component: {fileID: 1322126599808400259}
   - component: {fileID: 1475080668586388460}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1104,10 +1104,10 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 1
+  m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1322126599808400259
@@ -1149,7 +1149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30c4999b6e810d4f83bc442f768d6ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customGravity: 2
 --- !u!1 &7613324087019449656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,7 +1160,7 @@ GameObject:
   - component: {fileID: 7069728984451995672}
   - component: {fileID: 4527771634479909696}
   - component: {fileID: 9083991022868434422}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1401,7 +1400,7 @@ GameObject:
   - component: {fileID: 3483972585304617779}
   - component: {fileID: 8755057914497755778}
   - component: {fileID: 670227087615769485}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

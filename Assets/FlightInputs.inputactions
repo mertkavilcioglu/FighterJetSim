@@ -121,6 +121,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SelectFlight",
+                    "type": "Button",
+                    "id": "d7486df6-144b-46f4-890f-bf78d682046e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -380,7 +389,7 @@
                 {
                     "name": "",
                     "id": "7ea691b7-7dfd-400e-a5bd-6525d8a81863",
-                    "path": "<Keyboard>/1",
+                    "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -402,7 +411,7 @@
                 {
                     "name": "",
                     "id": "0a1bcc32-a7bd-43c6-8058-b650f03620c9",
-                    "path": "<Keyboard>/2",
+                    "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -429,6 +438,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Lock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7f666f2-9f7a-47f3-975c-77a84a822c8b",
+                    "path": "<HID::Thrustmaster T.16000M>/button7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectFlight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f3f2bc5-6056-462c-9882-acca2b5caa97",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectFlight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
