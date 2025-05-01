@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 public class WeaponControls : MonoBehaviour
 {
     [Header("Input")]
-    public InputActionReference shootAction;
+    public InputActionReference shootGunAction;
+    public InputActionReference fireMissileAction;
     public InputActionReference flightModeAction;
     public InputActionReference gunModeAction;
     public InputActionReference missileModeAction;
@@ -35,7 +36,7 @@ public class WeaponControls : MonoBehaviour
 
     private int currentAmmo;
     private float fireCooldown;
-    private bool isShooting;
+    private bool isShooting = false;
 
     private bool isFlightMode = true;
     private bool isGunMode = false; 
@@ -52,8 +53,10 @@ public class WeaponControls : MonoBehaviour
     {
         currentAmmo = maxAmmo;
         UpdateAmmoCountHud();
-        shootAction.action.performed += ctx => isShooting = true;
-        shootAction.action.canceled += ctx => isShooting = false;
+        shootGunAction.action.performed += ctx => isShooting = true;
+        shootGunAction.action.canceled += ctx => isShooting = false;
+
+        fireMissileAction.action.started += ctx => Missiles();
 
         flightModeAction.action.performed += ctx => SwitchToFlightMode();
         gunModeAction.action.performed += ctx => SwitchToGunMode();
@@ -67,13 +70,13 @@ public class WeaponControls : MonoBehaviour
 
     void OnEnable()
     {
-        shootAction.action.Enable();
+        shootGunAction.action.Enable();
         lockAction.action.Enable();
     }
 
     void OnDisable()
     {
-        shootAction.action.Disable();
+        shootGunAction.action.Disable();
         lockAction.action.Disable();
     }
 
@@ -81,7 +84,6 @@ public class WeaponControls : MonoBehaviour
     {
         detectedEnemies.RemoveAll(enemy => enemy == null);
         Guns();
-        Missiles();
     }
 
     void FireGun()
@@ -211,7 +213,7 @@ public class WeaponControls : MonoBehaviour
 
     private void Missiles()
     {
-        if (isMissileMode && Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (isMissileMode)
         {
             FireMissile();
         }
@@ -225,10 +227,8 @@ public class WeaponControls : MonoBehaviour
         GameObject missile = missiles[currentMissileIndex];
         if (missile == null) return;
 
-        // Füze artýk baðýmsýz olacak
         missile.transform.parent = null;
 
-        // Kilitlendiðimiz hedef o anki hedef
         Transform target = lockedEnemy.transform;
 
         Rigidbody rb = missile.GetComponent<Rigidbody>();
@@ -237,7 +237,6 @@ public class WeaponControls : MonoBehaviour
             rb.isKinematic = false;
         }
 
-        // Füze hedefe yönelmesi için bir script varsa çaðýr:
         MissileController mc = missile.GetComponent<MissileController>();
         if (mc != null)
         {

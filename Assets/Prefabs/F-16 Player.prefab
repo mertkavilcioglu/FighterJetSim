@@ -17321,8 +17321,8 @@ Transform:
   m_GameObject: {fileID: 1796346922375184614}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3489.1606, y: 504.94, z: 0}
-  m_LocalScale: {x: 6525.9863, y: 1330.3171, z: 23.943064}
+  m_LocalPosition: {x: -6627.18, y: 375.2, z: 0}
+  m_LocalScale: {x: 12780.108, y: 1596.3806, z: 23.943064}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7909330755620947149}
@@ -49922,7 +49922,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74512ef2a9da188458618c7fcc24bec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootAction: {fileID: -6988272148569848569, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
+  shootGunAction: {fileID: -6988272148569848569, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
+  fireMissileAction: {fileID: -6988272148569848569, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
   flightModeAction: {fileID: 680604462433513135, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
   gunModeAction: {fileID: -3666180034331391483, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
   missileModeAction: {fileID: 6422678099185270822, guid: c740bd621df124b42ab64479aa2d4666, type: 3}
@@ -52281,8 +52282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fe9884ec89a0240af0dcb34f7de069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 45
-  rotateSpeed: 50
+  speed: 60
+  rotateSpeed: 75
   hitParticle: {fileID: 1691157244311197436, guid: 79b62de3bf248b24cb2cb2779cdd652f, type: 3}
 --- !u!1 &6647133483059503616
 GameObject:
@@ -66186,8 +66187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fe9884ec89a0240af0dcb34f7de069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 45
-  rotateSpeed: 50
+  speed: 60
+  rotateSpeed: 75
   hitParticle: {fileID: 1691157244311197436, guid: 79b62de3bf248b24cb2cb2779cdd652f, type: 3}
 --- !u!1 &8939232520529246360
 GameObject:

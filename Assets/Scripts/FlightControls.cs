@@ -188,12 +188,6 @@ public class FlightControls : MonoBehaviour
         }
     }
 
-    // radar
-    // missile
-    // enemy gun missile
-    // flare/chaff
-
-
     private void Altitude()
     {
         altitude = startAltitude + transform.position.y * 10f;

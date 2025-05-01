@@ -49,7 +49,6 @@ public class Radar : MonoBehaviour
 
             weaponControls.AddEnemy(enemy);
 
-            // Timer varsa sýfýrla
             if (exitTimers.ContainsKey(enemy))
             {
                 StopCoroutine(exitTimers[enemy]);

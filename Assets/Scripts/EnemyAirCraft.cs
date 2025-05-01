@@ -7,7 +7,7 @@ public class EnemyAirCraft : MonoBehaviour
     private float maxSimulatedSpeed = 70f;
     private float minSimulatedSpeed = 35f;
 
-    private float turnSpeed = 20f; 
+    [SerializeField] private float turnSpeed = 20f; 
     private float acceleration = 50f;
     private float currentSpeed;
 
