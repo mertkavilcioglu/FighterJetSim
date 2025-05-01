@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +10,7 @@ public class WeaponControls : MonoBehaviour
     public InputActionReference flightModeAction;
     public InputActionReference gunModeAction;
     public InputActionReference missileModeAction;
+    public InputActionReference lockAction;
 
     [Header("Weapon Settings")]
     [SerializeField] private int maxAmmo = 512;
@@ -37,6 +39,11 @@ public class WeaponControls : MonoBehaviour
 
     private Rigidbody rbPlane;
 
+    public List<GameObject> detectedEnemies = new List<GameObject>();
+    public GameObject lockedEnemy;
+    private int currentLockedIndex = -1;
+    public EnemyHUDController enemyHudIcon;
+
     void Start()
     {
         currentAmmo = maxAmmo;
@@ -47,6 +54,7 @@ public class WeaponControls : MonoBehaviour
         flightModeAction.action.performed += ctx => SwitchToFlightMode();
         gunModeAction.action.performed += ctx => SwitchToGunMode();
         missileModeAction.action.performed += ctx => SwitchToMissileMode();
+        lockAction.action.performed += ctx => LockNextEnemy();
 
         rbPlane = GetComponent<Rigidbody>();
 
@@ -56,27 +64,22 @@ public class WeaponControls : MonoBehaviour
     void OnEnable()
     {
         shootAction.action.Enable();
+        lockAction.action.Enable();
     }
 
     void OnDisable()
     {
         shootAction.action.Disable();
+        lockAction.action.Disable();
     }
 
     void Update()
     {
-        if (isShooting && currentAmmo > 0 && fireCooldown <= 0f)
-        {
-            Fire();
-            fireCooldown = 1f / fireRate;
-        }
-        
-
-        if (fireCooldown > 0f)
-            fireCooldown -= Time.deltaTime;
+        detectedEnemies.RemoveAll(enemy => enemy == null);
+        Guns();
     }
 
-    void Fire()
+    void FireGun()
     {
         if (isGunMode)
         {
@@ -145,5 +148,59 @@ public class WeaponControls : MonoBehaviour
         flightHud.SetActive(false);
         gunHud.SetActive(false);
         missileHud.SetActive(true);
+    }
+
+    public void AddEnemy(GameObject enemy)
+    {
+        if (!detectedEnemies.Contains(enemy))
+        {
+            detectedEnemies.Add(enemy);
+            //Debug.Log("Enemy added: " + enemy.name);
+        }
+    }
+
+    public void RemoveEnemy(GameObject enemy)
+    {
+        if (detectedEnemies.Contains(enemy))
+        {
+            detectedEnemies.Remove(enemy);
+            //Debug.Log("Enemy removed: " + enemy.name);
+        }
+    }
+
+    private void LockNextEnemy()
+    {
+        if (detectedEnemies.Count == 0) return;
+        detectedEnemies.RemoveAll(e => e == null);
+
+        if (lockedEnemy != null && enemyHudIcon != null)
+        {
+            enemyHudIcon.DeactivateLockedHud();
+        }
+
+        currentLockedIndex = (currentLockedIndex + 1) % detectedEnemies.Count;
+        lockedEnemy = detectedEnemies[currentLockedIndex];
+
+        if (lockedEnemy != null)
+        {
+            enemyHudIcon = lockedEnemy.GetComponent<EnemyHUDController>();
+            if (enemyHudIcon != null)
+            {
+                enemyHudIcon.ActivateLockedHud();
+            }
+        }
+    }
+
+    private void Guns()
+    {
+        if (isShooting && currentAmmo > 0 && fireCooldown <= 0f)
+        {
+            FireGun();
+            fireCooldown = 1f / fireRate;
+        }
+
+
+        if (fireCooldown > 0f)
+            fireCooldown -= Time.deltaTime;
     }
 }

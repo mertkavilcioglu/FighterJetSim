@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class EnemyHUDController : MonoBehaviour
 {
-    public GameObject hudPrefab; 
+    public GameObject hudPrefab;
+    public GameObject lockedHudPrefab;
     private GameObject hudInstance;
     private RectTransform hudRect;
     private TMP_Text distanceText;
@@ -11,6 +12,8 @@ public class EnemyHUDController : MonoBehaviour
     private Transform mainCamera;
     private Transform player;
     private Canvas canvas;
+
+    private GameObject lockedHudInstance;
 
     void Start()
     {
@@ -59,5 +62,29 @@ public class EnemyHUDController : MonoBehaviour
     {
         if (hudInstance != null)
             Destroy(hudInstance);
+
+        DeactivateLockedHud();
+    }
+
+    public void ActivateLockedHud()
+    {
+        if (lockedHudPrefab == null || hudInstance == null) return;
+
+        if (lockedHudInstance == null)
+        {
+            lockedHudInstance = Instantiate(lockedHudPrefab, hudInstance.transform);
+            lockedHudInstance.transform.localPosition = Vector3.zero;
+            lockedHudInstance.transform.localRotation = Quaternion.identity;
+            //lockedHudInstance.transform.localScale = Vector3.one;
+        }
+    }
+
+    public void DeactivateLockedHud()
+    {
+        if (lockedHudInstance != null)
+        {
+            Destroy(lockedHudInstance);
+            lockedHudInstance = null;
+        }
     }
 }
