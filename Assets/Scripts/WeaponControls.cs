@@ -29,6 +29,10 @@ public class WeaponControls : MonoBehaviour
     public GameObject gunHud;
     public GameObject missileHud;
 
+    [Header("Missiles")]
+    public GameObject[] missiles;
+    private int currentMissileIndex = 0;
+
     private int currentAmmo;
     private float fireCooldown;
     private bool isShooting;
@@ -77,6 +81,7 @@ public class WeaponControls : MonoBehaviour
     {
         detectedEnemies.RemoveAll(enemy => enemy == null);
         Guns();
+        Missiles();
     }
 
     void FireGun()
@@ -203,4 +208,43 @@ public class WeaponControls : MonoBehaviour
         if (fireCooldown > 0f)
             fireCooldown -= Time.deltaTime;
     }
+
+    private void Missiles()
+    {
+        if (isMissileMode && Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            FireMissile();
+        }
+    }
+
+    private void FireMissile()
+    {
+        if (lockedEnemy == null || missiles.Length == 0 || currentMissileIndex >= missiles.Length)
+            return;
+
+        GameObject missile = missiles[currentMissileIndex];
+        if (missile == null) return;
+
+        // Füze artýk baðýmsýz olacak
+        missile.transform.parent = null;
+
+        // Kilitlendiðimiz hedef o anki hedef
+        Transform target = lockedEnemy.transform;
+
+        Rigidbody rb = missile.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+        }
+
+        // Füze hedefe yönelmesi için bir script varsa çaðýr:
+        MissileController mc = missile.GetComponent<MissileController>();
+        if (mc != null)
+        {
+            mc.SetTarget(target);
+        }
+
+        currentMissileIndex++;
+    }
+
 }
