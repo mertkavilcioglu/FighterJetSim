@@ -22,6 +22,8 @@ public class EnemyAirCraft : MonoBehaviour
     private Rigidbody rb;
     private float customGravity = 7f;
 
+    [SerializeField] private GameObject explosionPrefab;
+
     void Start()
     {
         if (target == null)
@@ -106,7 +108,7 @@ public class EnemyAirCraft : MonoBehaviour
     public void ShootDown()
     {
         isDead = true;
-        Debug.Log("Enemy shot down!");  
+        //Debug.Log("Enemy shot down!");  
     }
 
     private void StartFalling()
@@ -129,6 +131,7 @@ public class EnemyAirCraft : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

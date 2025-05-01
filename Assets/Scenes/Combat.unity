@@ -1135,6 +1135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootObj: {fileID: 0}
+  explosionPrefab: {fileID: 0}
 --- !u!65 &148495212
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4405,6 +4406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootObj: {fileID: 1750905211}
+  explosionPrefab: {fileID: 6803065980625429379, guid: ea7403fb7fdba034a94e9a17d4ba997f, type: 3}
 --- !u!1001 &1170549293
 PrefabInstance:
   m_ObjectHideFlags: 0
