@@ -1001,8 +1001,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133417839}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 479.8524, y: 32.210155, z: 495.50858}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 479.8524, y: 32.21016, z: 495.50858}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8081,13 +8081,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: F-16 Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6454677564541286830, guid: 02efa021f66fbda4f81c88e7c5fc685f, type: 3}
+      propertyPath: initialSpeed
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 8180459352451209035, guid: 02efa021f66fbda4f81c88e7c5fc685f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 462.6
       objectReference: {fileID: 0}
     - target: {fileID: 8180459352451209035, guid: 02efa021f66fbda4f81c88e7c5fc685f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 41.637
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8180459352451209035, guid: 02efa021f66fbda4f81c88e7c5fc685f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8138,6 +8142,7 @@ GameObject:
   - component: {fileID: 1158939845}
   - component: {fileID: 5793737206639837930}
   - component: {fileID: 5793737206639837931}
+  - component: {fileID: 5793737206639837932}
   m_Layer: 0
   m_Name: Mig-29 Enemy
   m_TagString: Enemy
@@ -8544,14 +8549,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2978065664458908938}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 457.2, y: 140.3, z: -1934.5}
+  m_LocalRotation: {x: -0, y: -0.99884564, z: -0, w: -0.048037056}
+  m_LocalPosition: {x: 457.184, y: 205.73, z: 453.87848}
   m_LocalScale: {x: 0.020000003, y: 0.02, z: 0.020000003}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1750905211}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -185.507, z: 0}
 --- !u!65 &5793737206639837930
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8586,6 +8591,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hudPrefab: {fileID: 6339737831423533217, guid: e62f017c4f75b714ab32c21b8986263a, type: 3}
+--- !u!54 &5793737206639837932
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2978065664458908938}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &6059734892042915115
 GameObject:
   m_ObjectHideFlags: 0

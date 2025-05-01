@@ -12,10 +12,15 @@ public class EnemyAirCraft : MonoBehaviour
     private float currentSpeed;
 
 
-    [SerializeField] private Transform rootObj; // Roll uygulanacak obje
-    private float rollAngleMax = 70f;           // Maksimum roll açýsý
-    private float rollSmoothSpeed = 5f;         // Roll geçiþ hýzý
+    [SerializeField] private Transform rootObj; 
+    private float rollAngleMax = 70f;           
+    private float rollSmoothSpeed = 5f;         
     private float currentRoll = 0f;
+
+    private bool isDead = false;
+
+    private Rigidbody rb;
+    private float customGravity = 7f;
 
     void Start()
     {
@@ -27,14 +32,34 @@ public class EnemyAirCraft : MonoBehaviour
         }
 
         currentSpeed = simulatedCruiseSpeed;
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false; 
     }
 
     void FixedUpdate()
     {
         if (target == null) return;
 
-        Movement();
-        Roll();
+        if (!isDead)
+        {
+            Movement();
+            Roll();
+        }
+        else
+        {
+            StartFalling();
+        }
+
+        
+
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            ShootDown();
+        }
     }
 
     private void Movement()
@@ -45,37 +70,67 @@ public class EnemyAirCraft : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
 
         float distance = Vector3.Distance(transform.position, target.position);
-        float desiredSpeed = simulatedCruiseSpeed;
+        float targetSpeed = simulatedCruiseSpeed;
 
         if (distance > 3000f)
         {
-            desiredSpeed = maxSimulatedSpeed;
+            targetSpeed = maxSimulatedSpeed;
         }
         else if (distance < 1500f)
         {
-            desiredSpeed = minSimulatedSpeed;
+            targetSpeed = minSimulatedSpeed;
         }
 
-        currentSpeed = Mathf.MoveTowards(currentSpeed, desiredSpeed, acceleration * Time.fixedDeltaTime);
-        transform.position += transform.forward * currentSpeed * Time.deltaTime;
+        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.fixedDeltaTime);
+        rb.linearVelocity = transform.forward * currentSpeed; 
     }
 
     private void Roll()
     {
         if (rootObj == null) return;
 
-        // Yalnýzca yön farký üzerinden roll hesapla
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         Vector3 flatForward = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
         Vector3 flatTargetDir = new Vector3(directionToTarget.x, 0f, directionToTarget.z).normalized;
 
-        float signedAngle = Vector3.SignedAngle(flatForward, flatTargetDir, Vector3.up); // Saða/sola dönüþ farký
-        float targetRoll = Mathf.Clamp(signedAngle / 45f, -1f, 1f) * rollAngleMax;       // Normalize edilip roll hesaplanýr
+        float signedAngle = Vector3.SignedAngle(flatForward, flatTargetDir, Vector3.up); 
+        float targetRoll = Mathf.Clamp(signedAngle / 45f, -1f, 1f) * rollAngleMax;       
 
         currentRoll = Mathf.Lerp(currentRoll, targetRoll, rollSmoothSpeed * Time.fixedDeltaTime);
 
         Vector3 rootEuler = rootObj.localEulerAngles;
-        rootEuler.z = -currentRoll; // Z ekseninde yatýþ
+        rootEuler.z = -currentRoll; 
         rootObj.localEulerAngles = rootEuler;
     }
+
+    public void ShootDown()
+    {
+        isDead = true;
+        Debug.Log("Enemy shot down!");  
+    }
+
+    private void StartFalling()
+    {
+        if (rootObj != null)
+        {
+            Vector3 rootEuler = rootObj.localEulerAngles;
+            rootEuler.z += 200f * Time.fixedDeltaTime;
+            rootObj.localEulerAngles = rootEuler;
+
+            Vector3 lastSpeed = transform.forward * currentSpeed;
+            rb.linearVelocity = new Vector3(lastSpeed.x, rb.linearVelocity.y, lastSpeed.z);
+
+            //rb.useGravity = true;
+            rb.AddForce(Vector3.down * customGravity, ForceMode.Acceleration);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
 }

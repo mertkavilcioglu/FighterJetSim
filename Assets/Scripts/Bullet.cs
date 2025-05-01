@@ -1,14 +1,17 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     private float customGravity = 1f;
     private Rigidbody rb;
+    public GameObject mainObj;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
+        StartCoroutine(DestroyBullet());
     }
 
     void FixedUpdate()
@@ -20,7 +23,13 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Hit Enemy");
+            collision.gameObject.GetComponent<EnemyAirCraft>().ShootDown();
         }
+    }
+
+    private IEnumerator DestroyBullet()
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(mainObj);
     }
 }

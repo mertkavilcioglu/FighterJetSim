@@ -12,6 +12,7 @@ public class FlightControls : MonoBehaviour
 
     [Header("Aircraft Settings (F-16C)")]
     private float maxSpeed = 1345f;
+    public float initialSpeed = 0f;
     private float realSpeed;
     private float simulatedSpeed;
 
@@ -69,7 +70,10 @@ public class FlightControls : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         Cursor.lockState = CursorLockMode.Locked;  
-        Cursor.visible = false;  
+        Cursor.visible = false;
+        realSpeed = initialSpeed;
+
+        InitializeSpeed();
     }
 
     void Update()
@@ -184,9 +188,7 @@ public class FlightControls : MonoBehaviour
         }
     }
 
-    // enemy
-    // radar - hud
-    // gun
+    // radar
     // missile
     // enemy gun missile
     // flare/chaff
@@ -436,6 +438,11 @@ public class FlightControls : MonoBehaviour
             airBrakeOn = !airBrakeOn;
         }
         Debug.Log("Air Brake: " + (airBrakeOn ? "On" : "Off"));
+    }
+
+    private void InitializeSpeed()
+    {
+        rb.linearVelocity = -transform.right * initialSpeed/9f;
     }
 
     public float GetAltitude()
