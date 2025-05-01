@@ -12,7 +12,6 @@ public class FlightControls : MonoBehaviour
 
     [Header("Aircraft Settings (F-16C)")]
     private float maxSpeed = 1345f;
-    private float cruisingSpeed = 577f;
     private float realSpeed;
     private float simulatedSpeed;
 

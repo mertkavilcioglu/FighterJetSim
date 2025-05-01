@@ -31,12 +31,12 @@ public class EnemyHUDController : MonoBehaviour
         distanceText = hudInstance.GetComponentInChildren<TMP_Text>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (mainCamera == null || hudInstance == null) return;
 
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-        Debug.Log("Screen Position: " + screenPos);
+        //Debug.Log("Screen Position: " + screenPos);
 
         if (screenPos.z > 0)
         {

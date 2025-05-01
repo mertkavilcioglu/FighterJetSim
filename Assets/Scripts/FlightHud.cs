@@ -32,6 +32,7 @@ public class FlightHud : MonoBehaviour
     private void UpdateHorizon()
     {
         if (linesMove == null) return;
+        if (linesRot == null) return;
 
         float zRotation = flightControls.transform.eulerAngles.z;
 

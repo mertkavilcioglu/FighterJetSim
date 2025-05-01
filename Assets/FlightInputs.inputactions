@@ -85,6 +85,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "ed8a2978-4cd6-4b6e-8c85-1d5db40f4e9b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectGun",
+                    "type": "Button",
+                    "id": "91ab7672-3705-44ba-a1e1-33463022bd94",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SelectMissile",
+                    "type": "Button",
+                    "id": "488dd403-bed6-44da-869c-320ba7f3a009",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Lock",
+                    "type": "Button",
+                    "id": "7c185b3f-361d-48f9-86dd-19c57db87a58",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -305,6 +341,94 @@
                     "processors": "",
                     "groups": "",
                     "action": "ZoomOut",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c542dd6-e355-4d30-bd6c-46f23a7482d6",
+                    "path": "<Joystick>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6bc246b-620f-4d21-a818-ac5dc3c8be82",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "438defcc-1c96-4a2d-bcf8-6b02d7e0bc3d",
+                    "path": "<HID::Thrustmaster T.16000M>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ea691b7-7dfd-400e-a5bd-6525d8a81863",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e60da993-78d4-46cb-987b-b4e784ec6db4",
+                    "path": "<HID::Thrustmaster T.16000M>/button4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectMissile",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a1bcc32-a7bd-43c6-8058-b650f03620c9",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectMissile",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66f83ed4-e69e-4b05-890c-75e4c6d71d51",
+                    "path": "<HID::Thrustmaster T.16000M>/button2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Lock",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54d4a319-0df6-4c87-b645-e1255df0439f",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Lock",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
